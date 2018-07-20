@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xjj.wefactory.business.goods.dao.GoodsSpecificationDao">
+	<select id="getById" resultType="GoodsSpecificationEntity" parameterType="long">
+		SELECT
+			*
+		FROM
+			t_business_goods_specification
+		WHERE
+			id = #{id}
+	</select>
+	
+	<select id="findAll" resultType="GoodsSpecificationEntity">
+		SELECT * FROM t_business_goods_specification
+	</select>
+	
+	<insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.xjj.wefactory.business.goods.entity.GoodsSpecificationEntity">
+		insert into t_business_goods_specification(id,goods_id,value,pic_url,specification,price,stock_number,add_time,status)
+    	values(#{id},#{goodsId},#{value},#{picUrl},#{specification},#{price},#{stockNumber},#{addTime},#{status})
+	</insert>
+	
+	<update id="update" parameterType="GoodsSpecificationEntity">  
+        UPDATE t_business_goods_specification SET 
+             id = #{id},
+             goods_id = #{goodsId},
+             value = #{value},
+             pic_url = #{picUrl},
+             specification = #{specification},
+             price = #{price},
+             stock_number = #{stockNumber},
+             add_time = #{addTime},
+             status = #{status}
+        WHERE id = #{id};     
+	</update>
+		
+	<delete id="delete" parameterType="long">  
+        DELETE FROM t_business_goods_specification WHERE id = #{id}  
+	</delete> 
+	
+	<select id="getCount" resultType="java.lang.Integer">         
+    	select count(id) from t_business_goods_specification 
+    	<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+	</select> 
+	
+	<select id="findList" resultType="GoodsSpecificationEntity">
+		SELECT * FROM t_business_goods_specification
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+	</select>
+	<select id="findPage" resultType="GoodsSpecificationEntity">
+		SELECT
+			*
+		FROM
+			t_business_goods_specification
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+		LIMIT #{offset}, #{limit}
+	</select>
+	
+	<select id="findListByColumnValues" resultType="GoodsSpecificationEntity">
+		SELECT * FROM t_business_goods_specification
+		where ${column} in
+        <foreach collection="valArr" index="index" item="item" open="(" separator="," close=")">
+              #{item}       
+        </foreach>    
+	</select>
+</mapper>

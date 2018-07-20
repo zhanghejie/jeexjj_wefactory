@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xjj.wefactory.customer.order.dao.OrderDao">
+	<select id="getById" resultType="OrderEntity" parameterType="long">
+		SELECT
+			*
+		FROM
+			t_customer_order
+		WHERE
+			id = #{id}
+	</select>
+	
+	<select id="findAll" resultType="OrderEntity">
+		SELECT * FROM t_customer_order
+	</select>
+	
+	<insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.xjj.wefactory.customer.order.entity.OrderEntity">
+		insert into t_customer_order(id,customer_id,order_sn,order_status,consignee,mobile,address,goods_price,freight_price,coupon_price,integral_price,order_price,actual_price,pay_id,pay_status,pay_time,ship_sn,ship_channel,ship_start_time,ship_end_time,confirm_time,end_time,add_time,status)
+    	values(#{id},#{customerId},#{orderSn},#{orderStatus},#{consignee},#{mobile},#{address},#{goodsPrice},#{freightPrice},#{couponPrice},#{integralPrice},#{orderPrice},#{actualPrice},#{payId},#{payStatus},#{payTime},#{shipSn},#{shipChannel},#{shipStartTime},#{shipEndTime},#{confirmTime},#{endTime},#{addTime},#{status})
+	</insert>
+	
+	<update id="update" parameterType="OrderEntity">  
+        UPDATE t_customer_order SET 
+             id = #{id},
+             customer_id = #{customerId},
+             order_sn = #{orderSn},
+             order_status = #{orderStatus},
+             consignee = #{consignee},
+             mobile = #{mobile},
+             address = #{address},
+             goods_price = #{goodsPrice},
+             freight_price = #{freightPrice},
+             coupon_price = #{couponPrice},
+             integral_price = #{integralPrice},
+             order_price = #{orderPrice},
+             actual_price = #{actualPrice},
+             pay_id = #{payId},
+             pay_status = #{payStatus},
+             pay_time = #{payTime},
+             ship_sn = #{shipSn},
+             ship_channel = #{shipChannel},
+             ship_start_time = #{shipStartTime},
+             ship_end_time = #{shipEndTime},
+             confirm_time = #{confirmTime},
+             end_time = #{endTime},
+             add_time = #{addTime},
+             status = #{status}
+        WHERE id = #{id};     
+	</update>
+		
+	<delete id="delete" parameterType="long">  
+        DELETE FROM t_customer_order WHERE id = #{id}  
+	</delete> 
+	
+	<select id="getCount" resultType="java.lang.Integer">         
+    	select count(id) from t_customer_order 
+    	<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+	</select> 
+	
+	<select id="findList" resultType="OrderEntity">
+		SELECT * FROM t_customer_order
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+	</select>
+	<select id="findPage" resultType="OrderEntity">
+		SELECT
+			*
+		FROM
+			t_customer_order
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+		LIMIT #{offset}, #{limit}
+	</select>
+	
+	<select id="findListByColumn" resultType="OrderEntity">
+		SELECT * FROM t_customer_order
+		where ${column} = #{val}  
+	</select>
+	
+	<select id="findListByColumnValues" resultType="OrderEntity">
+		SELECT * FROM t_customer_order
+		where ${column} in
+        <foreach collection="valArr" index="index" item="item" open="(" separator="," close=")">
+              #{item}       
+        </foreach>    
+	</select>
+</mapper>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xjj.wefactory.business.product.dao.ProductDao">
+	<select id="getById" resultType="ProductEntity" parameterType="long">
+		SELECT
+			*
+		FROM
+			t_business_product
+		WHERE
+			id = #{id}
+	</select>
+	
+	<select id="findAll" resultType="ProductEntity">
+		SELECT * FROM t_business_product
+	</select>
+	
+	<insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.xjj.wefactory.business.product.entity.ProductEntity">
+		insert into t_business_product(id,goods_id,goods_specification_ids,goods_number,retail_price,url,add_time,deleted)
+    	values(#{id},#{goodsId},#{goodsSpecificationIds},#{goodsNumber},#{retailPrice},#{url},#{addTime},#{deleted})
+	</insert>
+	
+	<update id="update" parameterType="ProductEntity">  
+        UPDATE t_business_product SET 
+             id = #{id},
+             goods_id = #{goodsId},
+             goods_specification_ids = #{goodsSpecificationIds},
+             goods_number = #{goodsNumber},
+             retail_price = #{retailPrice},
+             url = #{url},
+             add_time = #{addTime},
+             deleted = #{deleted}
+        WHERE id = #{id};     
+	</update>
+		
+	<delete id="delete" parameterType="long">  
+        DELETE FROM t_business_product WHERE id = #{id}  
+	</delete> 
+	
+	<select id="getCount" resultType="java.lang.Integer">         
+    	select count(id) from t_business_product 
+    	<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+	</select> 
+	
+	<select id="findList" resultType="ProductEntity">
+		SELECT * FROM t_business_product
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+	</select>
+	<select id="findPage" resultType="ProductEntity">
+		SELECT
+			*
+		FROM
+			t_business_product
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+		LIMIT #{offset}, #{limit}
+	</select>
+	
+	<select id="findListByColumnValues" resultType="ProductEntity">
+		SELECT * FROM t_business_product
+		where ${column} in
+        <foreach collection="valArr" index="index" item="item" open="(" separator="," close=")">
+              #{item}       
+        </foreach>    
+	</select>
+</mapper>

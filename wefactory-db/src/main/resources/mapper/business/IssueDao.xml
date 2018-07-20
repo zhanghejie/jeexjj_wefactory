@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xjj.wefactory.business.issue.dao.IssueDao">
+	<select id="getById" resultType="IssueEntity" parameterType="long">
+		SELECT
+			*
+		FROM
+			t_business_issue
+		WHERE
+			id = #{id}
+	</select>
+	
+	<select id="findAll" resultType="IssueEntity">
+		SELECT * FROM t_business_issue
+	</select>
+	
+	<insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.xjj.wefactory.business.issue.entity.IssueEntity">
+		insert into t_business_issue(id,seller_id,question,answer,add_time,status)
+    	values(#{id},#{sellerId},#{question},#{answer},#{addTime},#{status})
+	</insert>
+	
+	<update id="update" parameterType="IssueEntity">  
+        UPDATE t_business_issue SET 
+             id = #{id},
+             seller_id = #{sellerId},
+             question = #{question},
+             answer = #{answer},
+             add_time = #{addTime},
+             status = #{status}
+        WHERE id = #{id};     
+	</update>
+		
+	<delete id="delete" parameterType="long">  
+        DELETE FROM t_business_issue WHERE id = #{id}  
+	</delete> 
+	
+	<select id="getCount" resultType="java.lang.Integer">         
+    	select count(id) from t_business_issue 
+    	<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+	</select> 
+	
+	<select id="findList" resultType="IssueEntity">
+		SELECT * FROM t_business_issue
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+	</select>
+	<select id="findPage" resultType="IssueEntity">
+		SELECT
+			*
+		FROM
+			t_business_issue
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+		LIMIT #{offset}, #{limit}
+	</select>
+	
+	<select id="findListByColumnValues" resultType="IssueEntity">
+		SELECT * FROM t_business_issue
+		where ${column} in
+        <foreach collection="valArr" index="index" item="item" open="(" separator="," close=")">
+              #{item}       
+        </foreach>    
+	</select>
+</mapper>

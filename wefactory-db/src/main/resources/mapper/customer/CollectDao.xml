@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xjj.wefactory.customer.collect.dao.CollectDao">
+	<select id="getById" resultType="CollectEntity" parameterType="long">
+		SELECT
+			*
+		FROM
+			t_customer_collect
+		WHERE
+			id = #{id}
+	</select>
+	
+	<select id="findAll" resultType="CollectEntity">
+		SELECT * FROM t_customer_collect
+	</select>
+	
+	<insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.xjj.wefactory.customer.collect.entity.CollectEntity">
+		insert into t_customer_collect(id,customer_id,value_id,is_attention,type_id,add_time)
+    	values(#{id},#{customerId},#{valueId},#{isAttention},#{typeId},#{addTime})
+	</insert>
+	
+	<update id="update" parameterType="CollectEntity">  
+        UPDATE t_customer_collect SET 
+             id = #{id},
+             customer_id = #{customerId},
+             value_id = #{valueId},
+             is_attention = #{isAttention},
+             type_id = #{typeId},
+             add_time = #{addTime}
+        WHERE id = #{id};     
+	</update>
+		
+	<delete id="delete" parameterType="long">  
+        DELETE FROM t_customer_collect WHERE id = #{id}  
+	</delete> 
+	
+	<select id="getCount" resultType="java.lang.Integer">         
+    	select count(id) from t_customer_collect 
+    	<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+	</select> 
+	
+	<select id="findList" resultType="CollectEntity">
+		SELECT * FROM t_customer_collect
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+	</select>
+	
+	<select id="findPage" resultType="CollectEntity">
+		SELECT
+			*
+		FROM
+			t_customer_collect
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+		LIMIT #{offset}, #{limit}
+	</select>
+	
+	<select id="findListByColumnValues" resultType="CollectEntity">
+		SELECT * FROM t_customer_collect
+		where ${column} in
+        <foreach collection="valArr" index="index" item="item" open="(" separator="," close=")">
+              #{item}       
+        </foreach>    
+	</select>
+</mapper>

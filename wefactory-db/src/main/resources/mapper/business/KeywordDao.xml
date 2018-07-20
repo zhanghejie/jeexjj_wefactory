@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xjj.wefactory.business.keyword.dao.KeywordDao">
+	<select id="getById" resultType="KeywordEntity" parameterType="long">
+		SELECT
+			*
+		FROM
+			t_business_keyword
+		WHERE
+			id = #{id}
+	</select>
+	
+	<select id="findAll" resultType="KeywordEntity">
+		SELECT * FROM t_business_keyword
+	</select>
+	
+	<insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.xjj.wefactory.business.keyword.entity.KeywordEntity">
+		insert into t_business_keyword(id,seller_id,keyword,url,is_hot,is_default,is_show,sort_order,add_time,status)
+    	values(#{id},#{sellerId},#{keyword},#{url},#{isHot},#{isDefault},#{isShow},#{sortOrder},#{addTime},#{status})
+	</insert>
+	
+	<update id="update" parameterType="KeywordEntity">  
+        UPDATE t_business_keyword SET 
+             id = #{id},
+             seller_id = #{sellerId},
+             keyword = #{keyword},
+             url = #{url},
+             is_hot = #{isHot},
+             is_default = #{isDefault},
+             is_show = #{isShow},
+             sort_order = #{sortOrder},
+             add_time = #{addTime},
+             status = #{status}
+        WHERE id = #{id};     
+	</update>
+		
+	<delete id="delete" parameterType="long">  
+        DELETE FROM t_business_keyword WHERE id = #{id}  
+	</delete> 
+	
+	<delete id="deleteByColumn">  
+        DELETE FROM t_business_keyword WHERE ${column} = #{val}
+	</delete>
+	
+	<select id="getCount" resultType="java.lang.Integer">         
+    	select count(id) from t_business_keyword 
+    	<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+	</select> 
+	
+	<select id="findList" resultType="KeywordEntity">
+		SELECT * FROM t_business_keyword
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+	</select>
+	<select id="findPage" resultType="KeywordEntity">
+		SELECT
+			*
+		FROM
+			t_business_keyword
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+		LIMIT #{offset}, #{limit}
+	</select>
+	
+	<select id="findListByColumn" resultType="KeywordEntity">
+		SELECT * FROM t_business_keyword
+		where ${column} = #{val}
+	</select>
+	<select id="findListByColumnLimit" resultType="KeywordEntity">
+		SELECT * FROM t_business_keyword
+		where ${column} = #{val}
+		LIMIT #{offset}, #{limit}
+	</select>
+	
+	<select id="findListByColumnValues" resultType="KeywordEntity">
+		SELECT * FROM t_business_keyword
+		where ${column} in
+        <foreach collection="valArr" index="index" item="item" open="(" separator="," close=")">
+              #{item}       
+        </foreach>    
+	</select>
+	<select id="findListByColumnValuesLimit" resultType="KeywordEntity">
+		SELECT * FROM t_business_keyword
+		where ${column} in
+        <foreach collection="valArr" index="index" item="item" open="(" separator="," close=")">
+              #{item}       
+        </foreach>    
+        LIMIT #{offset}, #{limit}
+	</select>
+</mapper>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xjj.wefactory.customer.address.dao.AddressDao">
+	<select id="getById" resultType="AddressEntity" parameterType="long">
+		SELECT
+			*
+		FROM
+			t_customer_address
+		WHERE
+			id = #{id}
+	</select>
+	
+	<select id="findAll" resultType="AddressEntity">
+		SELECT * FROM t_customer_address
+	</select>
+	
+	<insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.xjj.wefactory.customer.address.entity.AddressEntity">
+		insert into t_customer_address(id,customer_id,name,province_id,city_id,area_id,address,mobile,is_default,add_time,status)
+    	values(#{id},#{customerId},#{name},#{provinceId},#{cityId},#{areaId},#{address},#{mobile},#{isDefault},#{addTime},#{status})
+	</insert>
+	
+	<update id="update" parameterType="AddressEntity">  
+        UPDATE t_customer_address SET 
+             id = #{id},
+             customer_id = #{customerId},
+             name = #{name},
+             province_id = #{provinceId},
+             city_id = #{cityId},
+             area_id = #{areaId},
+             address = #{address},
+             mobile = #{mobile},
+             is_default = #{isDefault},
+             add_time = #{addTime},
+             status = #{status}
+        WHERE id = #{id};     
+	</update>
+		
+	<delete id="delete" parameterType="long">  
+        DELETE FROM t_customer_address WHERE id = #{id}  
+	</delete> 
+	
+	<update id="resetDefault" parameterType="long">  
+        UPDATE t_customer_address SET is_default = 1 WHERE customer_id = #{customerId};     
+	</update>
+	
+	<select id="getCount" resultType="java.lang.Integer">         
+    	select count(id) from t_customer_address 
+    	<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+	</select> 
+	
+	<select id="findList" resultType="AddressEntity">
+		SELECT * FROM t_customer_address
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+	</select>
+	<select id="findPage" resultType="AddressEntity">
+		SELECT
+			*
+		FROM
+			t_customer_address
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+		LIMIT #{offset}, #{limit}
+	</select>
+	
+	<select id="findListByColumn" resultType="AddressEntity">
+		SELECT * FROM t_customer_address
+		where ${column} =#{val}    
+	</select>
+	
+	<select id="findListByColumnValues" resultType="AddressEntity">
+		SELECT * FROM t_customer_address
+		where ${column} in
+        <foreach collection="valArr" index="index" item="item" open="(" separator="," close=")">
+              #{item}       
+        </foreach>    
+	</select>
+</mapper>

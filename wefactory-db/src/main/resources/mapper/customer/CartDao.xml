@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xjj.wefactory.customer.cart.dao.CartDao">
+	<select id="getById" resultType="CartEntity" parameterType="long">
+		SELECT
+			*
+		FROM
+			t_customer_cart
+		WHERE
+			id = #{id}
+	</select>
+	
+	<select id="findAll" resultType="CartEntity">
+		SELECT * FROM t_customer_cart
+	</select>
+	
+	<insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.xjj.wefactory.customer.cart.entity.CartEntity">
+		insert into t_customer_cart(id,customer_id,goods_id,product_id,goods_sn,goods_name,price,number,goods_spec_vals,goods_spec_ids,checked,pic_url,add_time)
+    	values(#{id},#{customerId},#{goodsId},#{productId},#{goodsSn},#{goodsName},#{price},#{number},#{goodsSpecVals},#{goodsSpecIds},#{checked},#{picUrl},#{addTime})
+	</insert>
+	
+	<update id="update" parameterType="CartEntity">  
+        UPDATE t_customer_cart SET 
+             id = #{id},
+             customer_id = #{customerId},
+             goods_id = #{goodsId},
+             product_id = #{productId},
+             goods_sn = #{goodsSn},
+             goods_name = #{goodsName},
+             price = #{price},
+             number = #{number},
+             goods_spec_vals = #{goodsSpecVals},
+             goods_spec_ids = #{goodsSpecIds},
+             checked = #{checked},
+             pic_url = #{picUrl},
+             add_time = #{addTime}
+        WHERE id = #{id}
+	</update>
+	
+	<update id="updateCheck">  
+        UPDATE t_customer_cart SET 
+            checked = #{checked},
+        WHERE customer_id = #{userId} and
+        product_id in
+        <foreach collection="productIds" index="index" item="item" open="(" separator="," close=")">
+              #{item}       
+        </foreach> 
+	</update>
+		
+	<delete id="delete" parameterType="long">  
+        DELETE FROM t_customer_cart WHERE id = #{id}  
+	</delete> 
+	
+	<delete id="deleteByProductId">  
+        DELETE FROM t_customer_cart WHERE customer_id = #{userId} and
+        product_id in
+        <foreach collection="productIds" index="index" item="item" open="(" separator="," close=")">
+              #{item}       
+        </foreach> 
+	</delete>
+	
+	<delete id="clearGoods" parameterType="long">  
+        DELETE FROM t_customer_cart WHERE customer_id = #{userId}
+	</delete> 
+	
+	<select id="getCount" resultType="java.lang.Integer">         
+    	select count(id) from t_customer_cart 
+    	<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+	</select> 
+	
+	<select id="findList" resultType="CartEntity">
+		SELECT * FROM t_customer_cart
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+	</select>
+	
+	<select id="findPage" resultType="CartEntity">
+		SELECT
+			*
+		FROM
+			t_customer_cart
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+		LIMIT #{offset}, #{limit}
+	</select>
+	
+	<select id="findListByColumn" resultType="CartEntity">
+		SELECT * FROM t_customer_cart
+		where ${column} = #{val}  
+	</select>
+	
+	<select id="findListByColumnValues" resultType="CartEntity">
+		SELECT * FROM t_customer_cart
+		where ${column} in
+        <foreach collection="valArr" index="index" item="item" open="(" separator="," close=")">
+              #{item}       
+        </foreach>    
+	</select>
+</mapper>

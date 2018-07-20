@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xjj.wefactory.business.goods.dao.GoodsDao">
+	
+	<resultMap id="GoodsMap" type="com.xjj.wefactory.business.goods.entity.GoodsEntity">
+	    <id column="id" jdbcType="INTEGER" property="id" />
+	    <result column="brand_id" jdbcType="INTEGER" property="brandId" />
+	    <result column="category_id" jdbcType="INTEGER" property="categoryId" />
+	    <result column="goods_sn" jdbcType="VARCHAR" property="goodsSn" />
+	    <result column="name" jdbcType="VARCHAR" property="name" />
+	    <result column="gallery" jdbcType="CHAR" property="gallery" typeHandler="com.xjj.framework.mybatis.JsonStringArrayTypeHandler" />
+	    <result column="keywords" jdbcType="VARCHAR" property="keywords" />
+	    <result column="goods_brief" jdbcType="VARCHAR" property="goodsBrief" />
+	    <result column="is_on_sale" jdbcType="BIT" property="isOnSale" />
+	    <result column="sort_order" jdbcType="SMALLINT" property="sortOrder" />
+	    <result column="counter_price" jdbcType="DECIMAL" property="counterPrice" />
+	    <result column="is_newly" jdbcType="BIT" property="isNewly" />
+	    <result column="primary_pic_url" jdbcType="VARCHAR" property="primaryPicUrl" />
+	    <result column="list_pic_url" jdbcType="VARCHAR" property="listPicUrl" />
+	    <result column="is_hot" jdbcType="BIT" property="isHot" />
+	    <result column="goods_unit" jdbcType="VARCHAR" property="goodsUnit" />
+	    <result column="retail_price" jdbcType="DECIMAL" property="retailPrice" />
+	    <result column="add_time" jdbcType="TIMESTAMP" property="addTime" />
+	    <result column="status" jdbcType="BIT" property="status" />
+	</resultMap>
+	
+	<select id="getById" resultMap="GoodsMap" parameterType="long">
+		SELECT
+			*
+		FROM
+			t_business_goods
+		WHERE
+			id = #{id}
+	</select>
+	
+	<select id="findAll" resultType="GoodsEntity">
+		SELECT * FROM t_business_goods
+	</select>
+	
+	<insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.xjj.wefactory.business.goods.entity.GoodsEntity">
+		insert into t_business_goods(id,brand_id,category_id,goods_sn,name,keywords,goods_brief,is_on_sale,sort_order,counter_price,is_newly,primary_pic_url,list_pic_url,is_hot,goods_unit,retail_price,goods_desc,add_time,status)
+    	values(#{id},#{brandId},#{categoryId},#{goodsSn},#{name},#{keywords},#{goodsBrief},#{isOnSale},#{sortOrder},#{counterPrice},#{isNewly},#{primaryPicUrl},#{listPicUrl},#{isHot},#{goodsUnit},#{retailPrice},#{goodsDesc},#{addTime},#{status})
+	</insert>
+	
+	<update id="update" parameterType="GoodsEntity">  
+        UPDATE t_business_goods SET 
+             id = #{id},
+             brand_id = #{brandId},
+             category_id = #{categoryId},
+             goods_sn = #{goodsSn},
+             name = #{name},
+             gallery = #{gallery,jdbcType=CHAR,typeHandler=com.xjj.framework.mybatis.JsonStringArrayTypeHandler},
+             keywords = #{keywords},
+             goods_brief = #{goodsBrief},
+             is_on_sale = #{isOnSale},
+             sort_order = #{sortOrder},
+             counter_price = #{counterPrice},
+             is_newly = #{isNewly},
+             primary_pic_url = #{primaryPicUrl},
+             list_pic_url = #{listPicUrl},
+             is_hot = #{isHot},
+             goods_unit = #{goodsUnit},
+             retail_price = #{retailPrice},
+             goods_desc = #{goodsDesc},
+             add_time = #{addTime},
+             status = #{status}
+        WHERE id = #{id};     
+	</update>
+		
+	<delete id="delete" parameterType="long">  
+        DELETE FROM t_business_goods WHERE id = #{id}  
+	</delete> 
+	
+	<select id="getCount" resultType="java.lang.Integer">         
+    	select count(id) from t_business_goods 
+    	<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+	</select> 
+	
+	<select id="findList" resultMap="GoodsMap">
+		SELECT * FROM t_business_goods
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+	</select>
+	
+	<select id="findPage" resultType="GoodsEntity">
+		SELECT
+			*
+		FROM
+			t_business_goods
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+		LIMIT #{offset}, #{limit}
+	</select>
+	
+	<select id="findListByColumnValues" resultType="GoodsEntity">
+		SELECT * FROM t_business_goods
+		where ${column} in
+        <foreach collection="valArr" index="index" item="item" open="(" separator="," close=")">
+              #{item}       
+        </foreach>    
+	</select>
+	
+	<select id="findListByColumnValuesLimit" resultType="GoodsEntity">
+		SELECT * FROM t_business_goods
+		where ${column} in
+        <foreach collection="valArr" index="index" item="item" open="(" separator="," close=")">
+              #{item}       
+        </foreach>
+		LIMIT #{offset}, #{limit}
+	</select>
+</mapper>

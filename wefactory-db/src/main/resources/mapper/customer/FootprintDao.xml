@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xjj.wefactory.customer.footprint.dao.FootprintDao">
+	<select id="getById" resultType="FootprintEntity" parameterType="long">
+		SELECT
+			*
+		FROM
+			t_customer_footprint
+		WHERE
+			id = #{id}
+	</select>
+	
+	<select id="findAll" resultType="FootprintEntity">
+		SELECT * FROM t_customer_footprint
+	</select>
+	
+	<insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.xjj.wefactory.customer.footprint.entity.FootprintEntity">
+		insert into t_customer_footprint(id,customer_id,goods_id,add_time)
+    	values(#{id},#{customerId},#{goodsId},#{addTime})
+	</insert>
+	
+	<update id="update" parameterType="FootprintEntity">  
+        UPDATE t_customer_footprint SET 
+             id = #{id},
+             customer_id = #{customerId},
+             goods_id = #{goodsId},
+             add_time = #{addTime}
+        WHERE id = #{id};     
+	</update>
+		
+	<delete id="delete" parameterType="long">  
+        DELETE FROM t_customer_footprint WHERE id = #{id}  
+	</delete> 
+	
+	<select id="getCount" resultType="java.lang.Integer">         
+    	select count(id) from t_customer_footprint 
+    	<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+	</select> 
+	
+	<select id="findList" resultType="FootprintEntity">
+		SELECT * FROM t_customer_footprint
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+	</select>
+	
+	<select id="findPage" resultType="FootprintEntity">
+		SELECT
+			*
+		FROM
+			t_customer_footprint
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+		LIMIT #{offset}, #{limit}
+	</select>
+	
+	<select id="findListByColumnValues" resultType="FootprintEntity">
+		SELECT * FROM t_customer_footprint
+		where ${column} in
+        <foreach collection="valArr" index="index" item="item" open="(" separator="," close=")">
+              #{item}       
+        </foreach>    
+	</select>
+</mapper>

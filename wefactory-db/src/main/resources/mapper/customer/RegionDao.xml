@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xjj.wefactory.customer.region.dao.RegionDao">
+	<select id="getById" resultType="RegionEntity" parameterType="long">
+		SELECT
+			*
+		FROM
+			t_customer_region
+		WHERE
+			id = #{id}
+	</select>
+	
+	<select id="findAll" resultType="RegionEntity">
+		SELECT * FROM t_customer_region
+	</select>
+	
+	<insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.xjj.wefactory.customer.region.entity.RegionEntity">
+		insert into t_customer_region(id,pid,name,type,code)
+    	values(#{id},#{pid},#{name},#{type},#{code})
+	</insert>
+	
+	<update id="update" parameterType="RegionEntity">  
+        UPDATE t_customer_region SET 
+             id = #{id},
+             pid = #{pid},
+             name = #{name},
+             type = #{type},
+             code = #{code}
+        WHERE id = #{id};     
+	</update>
+		
+	<delete id="delete" parameterType="long">  
+        DELETE FROM t_customer_region WHERE id = #{id}  
+	</delete> 
+	
+	<select id="getCount" resultType="java.lang.Integer">         
+    	select count(id) from t_customer_region 
+    	<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+	</select> 
+	
+	<select id="findList" resultType="RegionEntity">
+		SELECT * FROM t_customer_region
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+	</select>
+	<select id="findPage" resultType="RegionEntity">
+		SELECT
+			*
+		FROM
+			t_customer_region
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+		LIMIT #{offset}, #{limit}
+	</select>
+	
+	<select id="findListByColumn" resultType="RegionEntity">
+		SELECT * FROM t_customer_region
+		where ${column} = #{val}  
+	</select>
+	
+	<select id="findListByColumnValues" resultType="RegionEntity">
+		SELECT * FROM t_customer_region
+		where ${column} in
+        <foreach collection="valArr" index="index" item="item" open="(" separator="," close=")">
+              #{item}       
+        </foreach>    
+	</select>
+</mapper>

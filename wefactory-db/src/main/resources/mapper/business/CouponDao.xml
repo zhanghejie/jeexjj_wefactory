@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xjj.wefactory.business.coupon.dao.CouponDao">
+	<select id="getById" resultType="CouponEntity" parameterType="long">
+		SELECT
+			*
+		FROM
+			t_business_coupon
+		WHERE
+			id = #{id}
+	</select>
+	
+	<select id="findAll" resultType="CouponEntity">
+		SELECT * FROM t_business_coupon
+	</select>
+	
+	<insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.xjj.wefactory.business.coupon.entity.CouponEntity">
+		insert into t_business_coupon(id,seller_id,name,type_money,send_type,min_amount,max_amount,min_goods_amount,send_start,send_end,use_start,use_end,add_time,status)
+    	values(#{id},#{sellerId},#{name},#{typeMoney},#{sendType},#{minAmount},#{maxAmount},#{minGoodsAmount},#{sendStart},#{sendEnd},#{useStart},#{useEnd},#{addTime},#{status})
+	</insert>
+	
+	<update id="update" parameterType="CouponEntity">  
+        UPDATE t_business_coupon SET 
+             id = #{id},
+             seller_id = #{sellerId},
+             name = #{name},
+             type_money = #{typeMoney},
+             send_type = #{sendType},
+             min_amount = #{minAmount},
+             max_amount = #{maxAmount},
+             min_goods_amount = #{minGoodsAmount},
+             send_start = #{sendStart},
+             send_end = #{sendEnd},
+             use_start = #{useStart},
+             use_end = #{useEnd},
+             add_time = #{addTime},
+             status = #{status}
+        WHERE id = #{id};     
+	</update>
+		
+	<delete id="delete" parameterType="long">  
+        DELETE FROM t_business_coupon WHERE id = #{id}  
+	</delete> 
+	
+	<select id="getCount" resultType="java.lang.Integer">         
+    	select count(id) from t_business_coupon 
+    	<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+	</select> 
+	
+	<select id="findList" resultType="CouponEntity">
+		SELECT * FROM t_business_coupon
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+	</select>
+	<select id="findPage" resultType="CouponEntity">
+		SELECT
+			*
+		FROM
+			t_business_coupon
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+		LIMIT #{offset}, #{limit}
+	</select>
+	
+	<select id="findListByColumnValues" resultType="CouponEntity">
+		SELECT * FROM t_business_coupon
+		where ${column} in
+        <foreach collection="valArr" index="index" item="item" open="(" separator="," close=")">
+              #{item}       
+        </foreach>    
+	</select>
+</mapper>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xjj.wefactory.business.topic.dao.TopicDao">
+	<select id="getById" resultType="TopicEntity" parameterType="long">
+		SELECT
+			*
+		FROM
+			t_business_topic
+		WHERE
+			id = #{id}
+	</select>
+	
+	<select id="findAll" resultType="TopicEntity">
+		SELECT * FROM t_business_topic
+	</select>
+	
+	<insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.xjj.wefactory.business.topic.entity.TopicEntity">
+		insert into t_business_topic(id,seller_id,title,content,avatar,item_pic_url,subtitle,price_info,read_count,scene_pic_url,sort_order,is_show,add_time,status)
+    	values(#{id},#{sellerId},#{title},#{content},#{avatar},#{itemPicUrl},#{subtitle},#{priceInfo},#{readCount},#{scenePicUrl},#{sortOrder},#{isShow},#{addTime},#{status})
+	</insert>
+	
+	<update id="update" parameterType="TopicEntity">  
+        UPDATE t_business_topic SET 
+             id = #{id},
+             seller_id = #{sellerId},
+             title = #{title},
+             content = #{content},
+             avatar = #{avatar},
+             item_pic_url = #{itemPicUrl},
+             subtitle = #{subtitle},
+             price_info = #{priceInfo},
+             read_count = #{readCount},
+             scene_pic_url = #{scenePicUrl},
+             sort_order = #{sortOrder},
+             is_show = #{isShow},
+             add_time = #{addTime},
+             status = #{status}
+        WHERE id = #{id};     
+	</update>
+		
+	<delete id="delete" parameterType="long">  
+        DELETE FROM t_business_topic WHERE id = #{id}  
+	</delete> 
+	
+	<select id="getCount" resultType="java.lang.Integer">         
+    	select count(id) from t_business_topic 
+    	<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+	</select> 
+	
+	<select id="findList" resultType="TopicEntity">
+		SELECT * FROM t_business_topic
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+	</select>
+	
+	<select id="findPage" resultType="TopicEntity">
+		SELECT
+			*
+		FROM
+			t_business_topic
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+		LIMIT #{offset}, #{limit}
+	</select>
+	
+	<select id="findListByColumnValues" resultType="TopicEntity">
+		SELECT * FROM t_business_topic
+		where ${column} in
+        <foreach collection="valArr" index="index" item="item" open="(" separator="," close=")">
+              #{item}       
+        </foreach>    
+	</select>
+</mapper>

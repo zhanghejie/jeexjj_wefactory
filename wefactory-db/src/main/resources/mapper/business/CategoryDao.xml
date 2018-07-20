@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xjj.wefactory.business.category.dao.CategoryDao">
+	<select id="getById" resultType="CategoryEntity" parameterType="long">
+		SELECT
+			*
+		FROM
+			t_business_category
+		WHERE
+			id = #{id}
+	</select>
+	
+	<select id="findAll" resultType="CategoryEntity">
+		SELECT * FROM t_business_category
+	</select>
+	
+	<insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.xjj.wefactory.business.category.entity.CategoryEntity">
+		insert into t_business_category(id,seller_id,name,keywords,front_desc,parent_id,sort_order,show_index,is_show,banner_url,icon_url,img_url,wap_banner_url,level,type,front_name,add_time,status)
+    	values(#{id},#{sellerId},#{name},#{keywords},#{frontDesc},#{parentId},#{sortOrder},#{showIndex},#{isShow},#{bannerUrl},#{iconUrl},#{imgUrl},#{wapBannerUrl},#{level},#{type},#{frontName},#{addTime},#{status})
+	</insert>
+	
+	<update id="update" parameterType="CategoryEntity">  
+        UPDATE t_business_category SET 
+             id = #{id},
+             seller_id = #{sellerId},
+             name = #{name},
+             keywords = #{keywords},
+             front_desc = #{frontDesc},
+             parent_id = #{parentId},
+             sort_order = #{sortOrder},
+             show_index = #{showIndex},
+             is_show = #{isShow},
+             banner_url = #{bannerUrl},
+             icon_url = #{iconUrl},
+             img_url = #{imgUrl},
+             wap_banner_url = #{wapBannerUrl},
+             level = #{level},
+             type = #{type},
+             front_name = #{frontName},
+             add_time = #{addTime},
+             status = #{status}
+        WHERE id = #{id};     
+	</update>
+		
+	<delete id="delete" parameterType="long">  
+        DELETE FROM t_business_category WHERE id = #{id}  
+	</delete> 
+	
+	<select id="getCount" resultType="java.lang.Integer">         
+    	select count(id) from t_business_category 
+    	<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+	</select> 
+	
+	<select id="findList" resultType="CategoryEntity">
+		SELECT * FROM t_business_category
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+	</select>
+	
+	<select id="findPage" resultType="CategoryEntity">
+		SELECT
+			*
+		FROM
+			t_business_category
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+		LIMIT #{offset}, #{limit}
+	</select>
+	
+	<select id="findListByColumnValues" resultType="CategoryEntity">
+		SELECT * FROM t_business_category
+		where ${column} in
+        <foreach collection="valArr" index="index" item="item" open="(" separator="," close=")">
+              #{item}       
+        </foreach>    
+	</select>
+</mapper>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xjj.wefactory.business.brand.dao.BrandDao">
+	<select id="getById" resultType="BrandEntity" parameterType="long">
+		SELECT
+			*
+		FROM
+			t_business_brand
+		WHERE
+			id = #{id}
+	</select>
+	
+	<select id="findAll" resultType="BrandEntity">
+		SELECT * FROM t_business_brand
+	</select>
+	
+	<insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.xjj.wefactory.business.brand.entity.BrandEntity">
+		insert into t_business_brand(id,seller_id,name,list_pic_url,simple_desc,pic_url,sort_order,is_show,floor_price,app_list_pic_url,is_newly,new_pic_url,new_sort_order,add_time,status)
+    	values(#{id},#{sellerId},#{name},#{listPicUrl},#{simpleDesc},#{picUrl},#{sortOrder},#{isShow},#{floorPrice},#{appListPicUrl},#{isNewly},#{newPicUrl},#{newSortOrder},#{addTime},#{status})
+	</insert>
+	
+	<update id="update" parameterType="BrandEntity">  
+        UPDATE t_business_brand SET 
+             id = #{id},
+             seller_id = #{sellerId},
+             name = #{name},
+             list_pic_url = #{listPicUrl},
+             simple_desc = #{simpleDesc},
+             pic_url = #{picUrl},
+             sort_order = #{sortOrder},
+             is_show = #{isShow},
+             floor_price = #{floorPrice},
+             app_list_pic_url = #{appListPicUrl},
+             is_newly = #{isNewly},
+             new_pic_url = #{newPicUrl},
+             new_sort_order = #{newSortOrder},
+             add_time = #{addTime},
+             status = #{status}
+        WHERE id = #{id};     
+	</update>
+		
+	<delete id="delete" parameterType="long">  
+        DELETE FROM t_business_brand WHERE id = #{id}  
+	</delete> 
+	
+	<select id="getCount" resultType="java.lang.Integer">         
+    	select count(id) from t_business_brand 
+    	<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+	</select> 
+	
+	<select id="findList" resultType="BrandEntity">
+		SELECT * FROM t_business_brand
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+	</select>
+	
+	<select id="findPage" resultType="BrandEntity">
+		SELECT
+			t.*,
+			(select name from t_business_seller bs where bs.id=t.seller_id) seller_name
+		FROM
+			t_business_brand t
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+		LIMIT #{offset}, #{limit}
+	</select>
+	
+	<select id="findListByColumnValues" resultType="BrandEntity">
+		SELECT * FROM t_business_brand
+		where ${column} in
+        <foreach collection="valArr" index="index" item="item" open="(" separator="," close=")">
+              #{item}       
+        </foreach>    
+	</select>
+</mapper>

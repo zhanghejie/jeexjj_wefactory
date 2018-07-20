@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xjj.wefactory.customer.order.dao.OrderGoodsDao">
+	<select id="getById" resultType="OrderGoodsEntity" parameterType="long">
+		SELECT
+			*
+		FROM
+			t_customer_order_goods
+		WHERE
+			id = #{id}
+	</select>
+	
+	<select id="findAll" resultType="OrderGoodsEntity">
+		SELECT * FROM t_customer_order_goods
+	</select>
+	
+	<insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.xjj.wefactory.customer.order.entity.OrderGoodsEntity">
+		insert into t_customer_order_goods(id,order_id,goods_id,customer_id,goods_name,goods_sn,number,price,goods_spec_vals,goods_spec_ids,pic_url,add_time)
+    	values(#{id},#{orderId},#{goodsId},#{customerId},#{goodsName},#{goodsSn},#{number},#{price},#{goodsSpecVals},#{goodsSpecIds},#{picUrl},#{addTime})
+	</insert>
+	
+	<update id="update" parameterType="OrderGoodsEntity">  
+        UPDATE t_customer_order_goods SET 
+             id = #{id},
+             order_id = #{orderId},
+             goods_id = #{goodsId},
+             customer_id = #{customerId},
+             goods_name = #{goodsName},
+             goods_sn = #{goodsSn},
+             number = #{number},
+             price = #{price},
+             goods_spec_vals = #{goodsSpecVals},
+             goods_spec_ids = #{goodsSpecIds},
+             pic_url = #{picUrl},
+             add_time = #{addTime}
+        WHERE id = #{id};     
+	</update>
+		
+	<delete id="delete" parameterType="long">  
+        DELETE FROM t_customer_order_goods WHERE id = #{id}  
+	</delete> 
+	
+	<select id="getCount" resultType="java.lang.Integer">         
+    	select count(id) from t_customer_order_goods 
+    	<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+	</select> 
+	
+	<select id="findList" resultType="OrderGoodsEntity">
+		SELECT * FROM t_customer_order_goods
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+	</select>
+	<select id="findPage" resultType="OrderGoodsEntity">
+		SELECT
+			*
+		FROM
+			t_customer_order_goods
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+		LIMIT #{offset}, #{limit}
+	</select>
+	
+	<select id="findListByColumnValues" resultType="OrderGoodsEntity">
+		SELECT * FROM t_customer_order_goods
+		where ${column} in
+        <foreach collection="valArr" index="index" item="item" open="(" separator="," close=")">
+              #{item}       
+        </foreach>    
+	</select>
+</mapper>

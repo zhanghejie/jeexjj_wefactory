@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xjj.wefactory.customer.buyer.dao.BuyerCouponDao">
+	<select id="getById" resultType="BuyerCouponEntity" parameterType="long">
+		SELECT
+			*
+		FROM
+			t_customer_buyer_coupon
+		WHERE
+			id = #{id}
+	</select>
+	
+	<select id="findAll" resultType="BuyerCouponEntity">
+		SELECT * FROM t_customer_buyer_coupon
+	</select>
+	
+	<insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.xjj.wefactory.customer.buyer.entity.BuyerCouponEntity">
+		insert into t_customer_buyer_coupon(id,customer_id,coupon_id,user_id,order_id,used_time,add_time)
+    	values(#{id},#{customerId},#{couponId},#{userId},#{orderId},#{usedTime},#{addTime})
+	</insert>
+	
+	<update id="update" parameterType="BuyerCouponEntity">  
+        UPDATE t_customer_buyer_coupon SET 
+             id = #{id},
+             customer_id = #{customerId},
+             coupon_id = #{couponId},
+             user_id = #{userId},
+             order_id = #{orderId},
+             used_time = #{usedTime},
+             add_time = #{addTime}
+        WHERE id = #{id};     
+	</update>
+		
+	<delete id="delete" parameterType="long">  
+        DELETE FROM t_customer_buyer_coupon WHERE id = #{id}  
+	</delete> 
+	
+	<select id="getCount" resultType="java.lang.Integer">         
+    	select count(id) from t_customer_buyer_coupon 
+    	<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+	</select> 
+	
+	<select id="findList" resultType="BuyerCouponEntity">
+		SELECT * FROM t_customer_buyer_coupon
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+	</select>
+	<select id="findPage" resultType="BuyerCouponEntity">
+		SELECT
+			*
+		FROM
+			t_customer_buyer_coupon
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+		LIMIT #{offset}, #{limit}
+	</select>
+	
+	<select id="findListByColumnValues" resultType="BuyerCouponEntity">
+		SELECT * FROM t_customer_buyer_coupon
+		where ${column} in
+        <foreach collection="valArr" index="index" item="item" open="(" separator="," close=")">
+              #{item}       
+        </foreach>    
+	</select>
+</mapper>

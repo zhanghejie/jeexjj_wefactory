@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xjj.wefactory.customer.buyer.dao.BuyerDao">
+	<select id="getById" resultType="BuyerEntity" parameterType="long">
+		SELECT
+			*
+		FROM
+			t_customer_buyer
+		WHERE
+			id = #{id}
+	</select>
+	
+	<select id="findAll" resultType="BuyerEntity">
+		SELECT * FROM t_customer_buyer
+	</select>
+	
+	<insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.xjj.wefactory.customer.buyer.entity.BuyerEntity">
+		insert into t_customer_buyer(id,seller_id,username,password,gender,birthday,last_login_time,last_login_ip,user_level,nickname,mobile,register_ip,avatar,wx_openid,wx_unionid,add_time,status)
+    	values(#{id},#{sellerId},#{username},#{password},#{gender},#{birthday},#{lastLoginTime},#{lastLoginIp},#{userLevel},#{nickname},#{mobile},#{registerIp},#{avatar},#{wxOpenid},#{wxUnionid},#{addTime},#{status})
+	</insert>
+	
+	<update id="update" parameterType="BuyerEntity">  
+        UPDATE t_customer_buyer SET 
+             id = #{id},
+             seller_id = #{sellerId},
+             username = #{username},
+             password = #{password},
+             gender = #{gender},
+             birthday = #{birthday},
+             last_login_time = #{lastLoginTime},
+             last_login_ip = #{lastLoginIp},
+             user_level = #{userLevel},
+             nickname = #{nickname},
+             mobile = #{mobile},
+             register_ip = #{registerIp},
+             avatar = #{avatar},
+             wx_openid = #{wxOpenid},
+             wx_unionid = #{wxUnionid},
+             add_time = #{addTime},
+             status = #{status}
+        WHERE id = #{id};     
+	</update>
+		
+	<delete id="delete" parameterType="long">  
+        DELETE FROM t_customer_buyer WHERE id = #{id}  
+	</delete> 
+	
+	<select id="getCount" resultType="java.lang.Integer">         
+    	select count(id) from t_customer_buyer 
+    	<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+	</select> 
+	
+	<select id="findList" resultType="BuyerEntity">
+		SELECT * FROM t_customer_buyer
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+	</select>
+	<select id="findPage" resultType="BuyerEntity">
+		SELECT
+			*
+		FROM
+			t_customer_buyer
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+		LIMIT #{offset}, #{limit}
+	</select>
+	
+	<select id="findListByColumn" resultType="BuyerEntity">
+		SELECT * FROM t_customer_buyer where ${column} = #{val}
+	</select>
+	
+	<select id="findListByColumnValues" resultType="BuyerEntity">
+		SELECT * FROM t_customer_buyer
+		where ${column} in
+        <foreach collection="valArr" index="index" item="item" open="(" separator="," close=")">
+              #{item}       
+        </foreach>    
+	</select>
+</mapper>

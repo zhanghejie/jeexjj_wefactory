@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xjj.wefactory.customer.comment.dao.CommentDao">
+	<select id="getById" resultType="CommentEntity" parameterType="long">
+		SELECT
+			*
+		FROM
+			t_customer_comment
+		WHERE
+			id = #{id}
+	</select>
+	
+	<select id="findAll" resultType="CommentEntity">
+		SELECT * FROM t_customer_comment
+	</select>
+	
+	<insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.xjj.wefactory.customer.comment.entity.CommentEntity">
+		insert into t_customer_comment(id,customer_id,type_id,value_id,content,has_picture,pic_urls,star,add_time)
+    	values(#{id},#{customerId},#{typeId},#{valueId},#{content},#{hasPicture},#{picUrls},#{star},#{addTime})
+	</insert>
+	
+	<update id="update" parameterType="CommentEntity">  
+        UPDATE t_customer_comment SET 
+             id = #{id},
+             customer_id = #{customerId},
+             type_id = #{typeId},
+             value_id = #{valueId},
+             content = #{content},
+             has_picture = #{hasPicture},
+             pic_urls = #{picUrls},
+             star = #{star},
+             add_time = #{addTime}
+        WHERE id = #{id};     
+	</update>
+		
+	<delete id="delete" parameterType="long">  
+        DELETE FROM t_customer_comment WHERE id = #{id}  
+	</delete> 
+	
+	<select id="getCount" resultType="java.lang.Integer">         
+    	select count(id) from t_customer_comment 
+    	<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+	</select> 
+	
+	<select id="findList" resultType="CommentEntity">
+		SELECT * FROM t_customer_comment
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+	</select>
+	
+	<select id="findPage" resultType="CommentEntity">
+		SELECT
+			*
+		FROM
+			t_customer_comment
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+		LIMIT #{offset}, #{limit}
+	</select>
+	
+	<select id="findListByColumnValues" resultType="CommentEntity">
+		SELECT * FROM t_customer_comment
+		where ${column} in
+        <foreach collection="valArr" index="index" item="item" open="(" separator="," close=")">
+              #{item}       
+        </foreach>    
+	</select>
+</mapper>

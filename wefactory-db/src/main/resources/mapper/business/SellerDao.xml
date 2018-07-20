@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xjj.wefactory.business.seller.dao.SellerDao">
+	<select id="getById" resultType="SellerEntity" parameterType="long">
+		SELECT
+			*
+		FROM
+			t_business_seller
+		WHERE
+			id = #{id}
+	</select>
+	
+	<select id="findAll" resultType="SellerEntity">
+		SELECT * FROM t_business_seller
+	</select>
+	
+	<insert id="save" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="com.xjj.wefactory.business.seller.entity.SellerEntity">
+		insert into t_business_seller(id,identify,name,password,mobile,email,last_login_ip,last_login_time,avatar,add_time,status)
+    	values(#{id},#{identify},#{name},#{password},#{mobile},#{email},#{lastLoginIp},#{lastLoginTime},#{avatar},#{addTime},#{status})
+	</insert>
+	
+	<update id="update" parameterType="SellerEntity">  
+        UPDATE t_business_seller SET 
+             id = #{id},
+             identify = #{identify},
+             name = #{name},
+             password = #{password},
+             mobile = #{mobile},
+             email = #{email},
+             last_login_ip = #{lastLoginIp},
+             last_login_time = #{lastLoginTime},
+             avatar = #{avatar},
+             add_time = #{addTime},
+             status = #{status}
+        WHERE id = #{id};     
+	</update>
+		
+	<delete id="delete" parameterType="long">  
+        DELETE FROM t_business_seller WHERE id = #{id}  
+	</delete> 
+	
+	<select id="getCount" resultType="java.lang.Integer">         
+    	select count(id) from t_business_seller 
+    	<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+	</select> 
+	
+	<select id="findList" resultType="SellerEntity">
+		SELECT * FROM t_business_seller
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+	</select>
+	<select id="findPage" resultType="SellerEntity">
+		SELECT
+			*
+		FROM
+			t_business_seller
+		<include refid="com.xjj.framework.dao.CommonDao.queryParam"/>
+		<include refid="com.xjj.framework.dao.CommonDao.queryOrder"/>
+		LIMIT #{offset}, #{limit}
+	</select>
+	
+	<select id="findListByColumnValues" resultType="SellerEntity">
+		SELECT * FROM t_business_seller
+		where ${column} in
+        <foreach collection="valArr" index="index" item="item" open="(" separator="," close=")">
+              #{item}       
+        </foreach>    
+	</select>
+</mapper>
