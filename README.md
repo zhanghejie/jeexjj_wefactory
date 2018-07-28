@@ -3,7 +3,6 @@
 - 基于springboot的微服务模式，可平滑升级为微服务高并发架构。
 - 致力于行业全覆盖一体化微信小程序解决方案的开源框架，3分钟生成各行业小程序。
 - 了解jeexjj轻量级快速开发框架，请移步 [码云开源地址](https://gitee.com/zhanghejie/jeexjj) 或  [github开源地址](https://github.com/zhanghejie/jeexjj)。
-- 本项目借鉴litemall开源项目，向litemall致敬。
 - 码云开源地址：[https://gitee.com/zhanghejie/jeexjj_wefactory](https://gitee.com/zhanghejie/jeexjj_wefactory) 
 - github开源地址：[https://github.com/zhanghejie/jeexjj_wefactory](https://github.com/zhanghejie/jeexjj_wefactory) 
 
